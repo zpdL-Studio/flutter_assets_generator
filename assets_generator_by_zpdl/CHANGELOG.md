@@ -1,3 +1,7 @@
+## 1.2.0
+
+* update
+
 ## 1.1.3
 
 * upadte sdk version

@@ -1,6 +1,6 @@
-## 1.1.4
+## 1.2.0
 
-* update homepage 
+* update 
 
 ## 1.1.3
 
