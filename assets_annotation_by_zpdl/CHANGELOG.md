@@ -1,3 +1,7 @@
+## 1.1.4
+
+* update homepage 
+
 ## 1.1.3
 
 * upadte sdk version
