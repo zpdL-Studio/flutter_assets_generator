@@ -91,7 +91,7 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
       final key = entry.key;
       final value = entry.value;
       if (value is Map<String, dynamic>) {
-        final childClassName = '_${element.name}' + _pascalCaseString(key);
+        final childClassName = '_${element.name}${_pascalCaseString(key)}';
         childrenWriteLine.addAll(_writeCodeBody(
             caseType, childClassName, value.entries,
             singleInstance: true));

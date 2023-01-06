@@ -36,7 +36,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^2.0.1
   build_runner: ^2.0.6
   assets_generator_by_zpdl:
     path: ..

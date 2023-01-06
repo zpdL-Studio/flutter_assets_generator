@@ -7,4 +7,4 @@ import 'assets_generator.dart';
 
 /// @nodoc
 Builder assetsByZpdl(BuilderOptions options) =>
-    SharedPartBuilder([AssetsGenerator()], 'assets_by_zpdl');
+    SharedPartBuilder([const AssetsGenerator()], 'assets_by_zpdl');
