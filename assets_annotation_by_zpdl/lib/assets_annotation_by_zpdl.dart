@@ -18,7 +18,9 @@ class AssetsAnnotation {
   const AssetsAnnotation(
       {this.isCamelCase = false, this.isSnakeCase = false, this.version = ''});
 
-  const AssetsAnnotation.camelCase({this.isCamelCase = true, this.isSnakeCase = false, this.version = ''});
+  const AssetsAnnotation.camelCase(
+      {this.isCamelCase = true, this.isSnakeCase = false, this.version = ''});
 
-  const AssetsAnnotation.snakeCase({this.isCamelCase = false, this.isSnakeCase = true, this.version = ''});
+  const AssetsAnnotation.snakeCase(
+      {this.isCamelCase = false, this.isSnakeCase = true, this.version = ''});
 }
