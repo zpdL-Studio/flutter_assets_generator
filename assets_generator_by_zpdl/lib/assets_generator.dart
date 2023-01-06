@@ -220,7 +220,7 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
     var sb = StringBuffer();
 
     var nonAlphaNumeric = str.replaceAll(_nonAlphaNumeric, '_');
-    if(nonAlphaNumeric.isNotEmpty) {
+    if (nonAlphaNumeric.isNotEmpty) {
       sb.write(nonAlphaNumeric[0].replaceAll(_alpha, firstLetter));
       sb.write(nonAlphaNumeric.substring(1));
     }
@@ -233,7 +233,7 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
         var sb = StringBuffer();
 
         var nonAlphaNumeric = str.replaceAll(_nonAlphaNumeric, '_');
-        if(nonAlphaNumeric.isNotEmpty) {
+        if (nonAlphaNumeric.isNotEmpty) {
           sb.write(nonAlphaNumeric[0].replaceAll(_alpha, 'u'));
           sb.write(nonAlphaNumeric.substring(1));
         }
@@ -255,7 +255,7 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
         if (nonAlphaNumeric[i] == '_') {
           upper = true;
         } else if (upper) {
-          if(sb.isEmpty) {
+          if (sb.isEmpty) {
             sb.write(nonAlphaNumeric[i].toLowerCase());
           } else {
             sb.write(nonAlphaNumeric[i].toUpperCase());
@@ -301,7 +301,7 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
       for (var i = 0; i < nonAlphaNumeric.length; i++) {
         final upperCase = nonAlphaNumeric[i].toUpperCase();
         final lowerCase = nonAlphaNumeric[i].toLowerCase();
-        if(sb.isEmpty && nonAlphaNumeric[i] == '_') {
+        if (sb.isEmpty && nonAlphaNumeric[i] == '_') {
           continue;
         }
 
@@ -353,11 +353,11 @@ extension FileExtension on File {
 
   String get extension {
     final fileName = this.fileName;
-    if(fileName.contains('.')) {
+    if (fileName.contains('.')) {
       final sb = StringBuffer();
       final splits = fileName.split('.');
-      for(var i = 1; i < splits.length; i++) {
-        if(sb.isNotEmpty) {
+      for (var i = 1; i < splits.length; i++) {
+        if (sb.isNotEmpty) {
           sb.write('.');
         }
         sb.write(splits[i]);
