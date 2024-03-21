@@ -1,3 +1,9 @@
+## 1.3.1
+
+* windows build path error
+* analyzer: ^6.4.1
+* source_gen: ^1.5.0
+
 ## 1.3.0
 
 * upadte sdk version (">=3.1.3 <4.0.0")
