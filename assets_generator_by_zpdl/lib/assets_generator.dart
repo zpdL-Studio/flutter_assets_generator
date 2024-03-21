@@ -323,13 +323,13 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
       final value = entry.value;
       if (value.isNotEmpty) {
         if (value.length == 1) {
-          onWriter(_caseString(caseType, value.first.name), value.first.path);
+          onWriter(_caseString(caseType, value.first.name), value.first.path.replaceAll('\\', '/'));
         } else {
           for (final file in value) {
             onWriter(
                 _caseString(caseType,
                     '${file.name}${_pascalCaseString(file.extension)}'),
-                file.path);
+                file.path.replaceAll('\\', '/'));
           }
         }
       }
@@ -344,7 +344,7 @@ enum CaseType {
 }
 
 extension FileExtension on File {
-  String get fileName => path.split('/').last;
+  String get fileName => path.replaceAll('\\', '/').split('/').last;
 
   String get name {
     final fileName = this.fileName;
