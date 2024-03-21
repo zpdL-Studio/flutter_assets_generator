@@ -14,10 +14,10 @@ Add the following to your `pubspec.yaml`:
 
 ```sh
 dependencies:
-  assets_annotation_by_zpdl: ^1.2.0
+  assets_annotation_by_zpdl: ^1.3.0
 
 dev_dependencies:
-  assets_generator_by_zpdl: ^1.2.0
+  assets_generator_by_zpdl: ^1.3.0
   build_runner: <latest>
 ```
 
