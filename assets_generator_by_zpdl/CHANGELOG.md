@@ -1,3 +1,7 @@
+## 1.4.0
+
+* source_gen: ^2.0.0
+
 ## 1.3.1
 
 * windows build path error
