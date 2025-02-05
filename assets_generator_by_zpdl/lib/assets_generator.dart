@@ -72,12 +72,13 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
     }
 
     var entries = root.entries;
+
     while (entries.length <= 1) {
       if (entries.isNotEmpty) {
         final value = entries.first.value;
         if (value is Map<String, dynamic>) {
           entries = value.entries;
-          continue;
+          break;
         }
       }
       break;
