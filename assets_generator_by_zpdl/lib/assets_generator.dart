@@ -1,10 +1,8 @@
-library assets_generator_by_zpdl;
-
 import 'dart:async';
 import 'dart:io';
 
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:assets_annotation_by_zpdl/assets_annotation_by_zpdl.dart';
-import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:yaml/yaml.dart';
@@ -18,13 +16,18 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
 
   @override
   FutureOr<String> generateForAnnotatedElement(
-      Element element, ConstantReader annotation, BuildStep buildStep) {
-    print('AssetsGenerator element : $element name : ${element.name}');
+    Element2 element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) {
+    print('AssetsGenerator -> element: ${element.displayName}');
 
-    if (element is! ClassElement) {
-      final name = element.name;
-      throw InvalidGenerationSourceError('Generator cannot target `$name`.',
-          todo: 'Remove the Assets annotation from `$name`.', element: element);
+    if (element is! ClassElement2) {
+      throw InvalidGenerationSourceError(
+        'Generator cannot target `${element.displayName}`.',
+        todo: 'This annotation can only be used on classes.',
+        element: element,
+      );
     }
 
     var caseType = CaseType.UNDEFINED;
@@ -92,10 +95,15 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
       final key = entry.key;
       final value = entry.value;
       if (value is Map<String, dynamic>) {
-        final childClassName = '_${element.name}${_pascalCaseString(key)}';
-        childrenWriteLine.addAll(_writeCodeBody(
-            caseType, childClassName, value.entries,
-            singleInstance: true));
+        final childClassName = '_${element.displayName}${_pascalCaseString(key)}';
+        childrenWriteLine.addAll(
+          _writeCodeBody(
+            caseType,
+            childClassName,
+            value.entries,
+            singleInstance: true,
+          ),
+        );
         writeClass.add(_WriteClass(key, childClassName));
       } else if (value is File) {
         var list = writeFile[value.name];
@@ -110,14 +118,21 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
 
     final code = StringBuffer();
     code.writeLine(
-        0, 'extension ${element.name}Extension on ${element.name} {');
+      0,
+      'extension ${element.displayName}Extension on ${element.displayName} {',
+    );
     for (final write in writeClass) {
       code.writeLine(
-          1, '${write.className} get ${write.key} => ${write.className}();');
+        1,
+        '${write.className} get ${write.key} => ${write.className}();',
+      );
     }
     code.writeLine(0, '');
-    _writeFiles(caseType, writeFile,
-        (key, value) => code.writeLine(1, 'String get $key => \'$value\';'));
+    _writeFiles(
+      caseType,
+      writeFile,
+      (key, value) => code.writeLine(1, 'String get $key => \'$value\';'),
+    );
 
     code.writeLine(0, '}');
     code.writeLine(0, '');
@@ -130,9 +145,12 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
   }
 
   Map<String, dynamic> _addPath(
-      CaseType caseType, Map<String, dynamic> root, List<String> pathSegments) {
-    final list = pathSegments.toList()
-      ..removeWhere((element) => element.isEmpty);
+    CaseType caseType,
+    Map<String, dynamic> root,
+    List<String> pathSegments,
+  ) {
+    final list =
+        pathSegments.toList()..removeWhere((element) => element.isEmpty);
 
     var node = root;
     for (final pathSegment in list) {
@@ -146,7 +164,8 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
         node = value;
       } else {
         throw ArgumentError(
-            'AssetsGenerator _addPath is not directory $pathSegments');
+          'AssetsGenerator _addPath is not directory $pathSegments',
+        );
       }
     }
 
@@ -159,9 +178,12 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
     }
   }
 
-  List<_WriteLine> _writeCodeBody(CaseType caseType, String className,
-      Iterable<MapEntry<String, dynamic>> entries,
-      {bool singleInstance = false}) {
+  List<_WriteLine> _writeCodeBody(
+    CaseType caseType,
+    String className,
+    Iterable<MapEntry<String, dynamic>> entries, {
+    bool singleInstance = false,
+  }) {
     final results = <_WriteLine>[];
     final childrenWriteLine = <_WriteLine>[];
 
@@ -173,8 +195,9 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
       final value = entry.value;
       if (value is Map<String, dynamic>) {
         final childClassName = className + _pascalCaseString(key);
-        childrenWriteLine
-            .addAll(_writeCodeBody(caseType, childClassName, value.entries));
+        childrenWriteLine.addAll(
+          _writeCodeBody(caseType, childClassName, value.entries),
+        );
         childrenWriteLine.add(_WriteLine.empty());
 
         writeClass.add(_WriteClass(key, childClassName));
@@ -192,7 +215,8 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
     results.add(_WriteLine(0, 'class $className {'));
     if (singleInstance) {
       results.add(
-          _WriteLine(1, 'static final $className _instance = $className._();'));
+        _WriteLine(1, 'static final $className _instance = $className._();'),
+      );
       results.add(_WriteLine(1, 'factory $className() => _instance;'));
       results.add(_WriteLine(1, '$className._();'));
     } else {
@@ -200,15 +224,20 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
     }
     results.add(_WriteLine.empty());
     for (final write in writeClass) {
-      results.add(_WriteLine(1,
-          'final ${write.className} ${write.key} = const ${write.className}();'));
+      results.add(
+        _WriteLine(
+          1,
+          'final ${write.className} ${write.key} = const ${write.className}();',
+        ),
+      );
     }
     results.add(_WriteLine.empty());
     _writeFiles(
-        caseType,
-        writeFile,
-        (key, value) =>
-            results.add(_WriteLine(1, 'final String $key = \'$value\';')));
+      caseType,
+      writeFile,
+      (key, value) =>
+          results.add(_WriteLine(1, 'final String $key = \'$value\';')),
+    );
     results.add(_WriteLine(0, '}'));
     results.addAll(childrenWriteLine);
     return results;
@@ -318,19 +347,28 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
     return str;
   }
 
-  void _writeFiles(CaseType caseType, Map<String, List<File>> files,
-      void Function(String key, String value) onWriter) {
+  void _writeFiles(
+    CaseType caseType,
+    Map<String, List<File>> files,
+    void Function(String key, String value) onWriter,
+  ) {
     for (final entry in files.entries) {
       final value = entry.value;
       if (value.isNotEmpty) {
         if (value.length == 1) {
-          onWriter(_caseString(caseType, value.first.name), value.first.path.replaceAll('\\', '/'));
+          onWriter(
+            _caseString(caseType, value.first.name),
+            value.first.path.replaceAll('\\', '/'),
+          );
         } else {
           for (final file in value) {
             onWriter(
-                _caseString(caseType,
-                    '${file.name}${_pascalCaseString(file.extension)}'),
-                file.path.replaceAll('\\', '/'));
+              _caseString(
+                caseType,
+                '${file.name}${_pascalCaseString(file.extension)}',
+              ),
+              file.path.replaceAll('\\', '/'),
+            );
           }
         }
       }
@@ -338,11 +376,7 @@ class AssetsGenerator extends GeneratorForAnnotation<AssetsAnnotation> {
   }
 }
 
-enum CaseType {
-  UNDEFINED,
-  CAMEL,
-  SNAKE,
-}
+enum CaseType { UNDEFINED, CAMEL, SNAKE }
 
 extension FileExtension on File {
   String get fileName => path.replaceAll('\\', '/').split('/').last;

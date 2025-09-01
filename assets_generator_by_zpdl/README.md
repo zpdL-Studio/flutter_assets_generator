@@ -17,7 +17,7 @@ dependencies:
   assets_annotation_by_zpdl: ^1.4.0
 
 dev_dependencies:
-  assets_generator_by_zpdl: ^1.4.0
+  assets_generator_by_zpdl: ^1.5.0
   build_runner: <latest>
 ```
 
